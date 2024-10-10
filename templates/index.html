@@ -1,0 +1,62 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<!-- Your body content -->
+<head>
+    <script>
+        document.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-Timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        });
+
+        // Function to get a cookie by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Check if the 'timezone' cookie is already set
+        if (!getCookie('timezone')) {
+            // Detect the user's timezone
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            // Set the cookie
+            document.cookie = `timezone=${timezone}; path=/; max-age=3600`; // Expires in 1 year
+            // Reload the page to send the cookie to the server
+            window.location.reload();
+        }
+        // Function to get a cookie by name
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        (function() {
+            // Detect the user's current timezone
+            const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            // Get the timezone from the cookie
+            const cookieTimezone = getCookie('timezone');
+
+            // Check if the cookie is not set or doesn't match the user's timezone
+            if (cookieTimezone !== userTimezone) {
+                // Set or update the cookie
+                const expires = new Date();
+                expires.setFullYear(expires.getFullYear() + 1); // Cookie expires in 1 year
+                document.cookie = `timezone=${userTimezone}; path=/; expires=${expires.toUTCString()}`;
+                // Reload the page to apply the new timezone
+                window.location.reload();
+            }
+        })();
+                    </script>
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+</head>
+<html>
+    <head>
+        <title>Timezone Aware App</title>
+    </head>
+    <body>
+        {% include 'event.html' %}
+        <h2>get with htmx</h2>
+        <div hx-get='/event' hx-trigger='load'/>
+    </body>
+</html>
