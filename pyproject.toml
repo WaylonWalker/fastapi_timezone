@@ -1,16 +1,62 @@
 [project]
 name = "fastapi-timezone"
-version = "0.1.1"
-description = "Add your description here"
+dynamic = ["version"]
+description = 'A demo fastapi application that automatically responds with the users localized timezone.'
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Waylon Walker", email = "waylon@waylonwalker.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
 dependencies = [
     "fastapi>=0.115.0",
-    "jinja2>=3.1.4",
-    "sqlmodel>=0.0.22",
+    "rich>=13.9.2",
     "uvicorn>=0.31.1",
 ]
 
-[tool.setuptools.packages.find]
-include = ["fastapi_timezone"]
-exclude = ["templates", "node_modules"]
+[project.urls]
+Documentation = "https://github.com/U.N. Owen/fastapi-dynamic-response#readme"
+Issues = "https://github.com/U.N. Owen/fastapi-dynamic-response/issues"
+Source = "https://github.com/U.N. Owen/fastapi-dynamic-response"
+
+[tool.hatch.version]
+path = "fastapi_timezone/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/fastapi_dynamic_response tests}"
+
+[tool.coverage.run]
+source_pkgs = ["fastapi_dynamic_response", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/fastapi_dynamic_response/__about__.py",
+]
+
+[tool.coverage.paths]
+fastapi_dynamic_response = ["src/fastapi_dynamic_response", "*/fastapi-dynamic-response/src/fastapi_dynamic_response"]
+tests = ["tests", "*/fastapi-dynamic-response/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
